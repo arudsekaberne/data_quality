@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Quality Report</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 25px;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    table {
+      border-radius: 8px;
+      overflow: hidden;
+      border-spacing: 0;
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 13px;
+      border: 1px solid #d1d5db;
+    }
+
+    table th,
+    table td {
+      padding: 8px;
+      border: 1px solid #d1d5db;
+      text-align: left;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    table th {
+      background: #1f2937;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    table td:nth-child(4) {
+      font-weight: bold;
+    }
+
+    table tr:hover td {
+      background-color: #f9fafb;
+      cursor: pointer;
+    }
+
+    .container {
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+    }
+
+    .job-card {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .job-card div,
+    .job-info {
+      margin: 6px;
+      flex: 1 1 30%;
+      font-size: 14px;
+    }
+
+    .job-info strong {
+      color: #1f2a44;
+    }
+
+    .status-success {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .status-failure {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .status-skipped {
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .status-warning {
+      color: #f97316;
+      font-weight: 600;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-block;
+      font-weight: 600;
+      margin: 4px;
+      font-style: italic;
+      background: #f8fafc;
+      border-style: dashed;
+      border-radius: 9999px;
+      font-size: 12px;
+      padding: 6px 14px;
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: left;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .table-scroll table {
+      min-width: 600px;
+      margin: 0;
+    }
+
+    @media screen and (max-width: 600px) {
+
+      .job-card div,
+      .job-info {
+        flex: 1 1 100%;
+      }
+    }
+
+    /* Your existing light mode styles here... */
+
+    /* Dark mode styles auto-applied via media query */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #1e1e1e;
+        color: #d4d4d4;
+      }
+
+      h1,
+      h2 {
+        color: #d4d4d4;
+      }
+
+      .container {
+        background: #252526;
+        box-shadow: none;
+        border: 1px solid #333333;
+      }
+
+      .job-card {
+        background: #2d2d2d;
+        border: 1px solid #3c3c3c;
+        box-shadow: none;
+        color: #cccccc;
+      }
+
+      .job-card div,
+      .job-info strong {
+        color: #ffffff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #333333;
+        border-radius: 8px;
+        font-size: 13px;
+        background: #1e1e1e;
+        color: #d4d4d4;
+      }
+
+      table th,
+      table td {
+        padding: 8px;
+        border: 1px solid #333333;
+        text-align: left;
+        background: #252526;
+        border-bottom: 1px solid #3c3c3c;
+      }
+
+      table th {
+        background: #2d2d2d;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      table td:nth-child(4) {
+        font-weight: bold;
+      }
+
+      table tr:hover td {
+        background-color: rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+      }
+
+      .status-success {
+        color: #6a9955;
+        font-weight: 600;
+      }
+
+      .status-failure {
+        color: #f44747;
+        font-weight: 600;
+      }
+
+      .status-skipped {
+        color: #9cdcfe;
+        font-weight: 600;
+      }
+
+      .status-warning {
+        color: #ce9178;
+        font-weight: 600;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        display: inline-block;
+        font-weight: 600;
+        margin: 4px;
+        font-style: italic;
+        background: #333333;
+        border-style: dashed;
+        border-radius: 9999px;
+        font-size: 12px;
+        padding: 6px 14px;
+        color: #d4d4d4;
+        border: 1px solid #3c3c3c;
+        box-shadow: none;
+      }
+
+      .footer-note {
+        margin-top: 30px;
+        font-size: 13px;
+        color: #808080;
+        text-align: left;
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .table-scroll table {
+        min-width: 600px;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Data Quality Report</h1>
+
+    <div class="job-card">
+      <div class="job-info"><strong>Job ID:</strong> {{ ph_job_id }}</div>
+      <div class="job-info"><strong>Job Name:</strong> {{ ph_job_name }}</div>
+      <div class="job-info"><strong>Job Status:</strong> {{ ph_job_status }}</div>
+      <div class="job-info"><strong>Batch ID:</strong> {{ ph_job_batch_id }}</div>
+      <div class="job-info"><strong>Batch Date:</strong> {{ ph_batch_date }}</div>
+      <div class="job-info"><strong>Batch Seq:</strong> {{ ph_batch_seq }}</div>
+      <div class="job-info"><strong>Batch Type:</strong> {{ ph_batch_type }}</div>
+      <div class="job-info"><strong>Alert Channel:</strong> {{ ph_alert_channel }}</div>
+      <div class="job-info"><strong>Validation Status:</strong> {{ ph_validation_status }}</div>
+      <div class="job-info"><strong>Start:</strong> {{ ph_dw_created_ts }}</div>
+      <div class="job-info"><strong>End:</strong> {{ ph_dw_updated_ts }}</div>
+      <div class="job-info"><strong>Time Taken:</strong> {{ ph_time_taken }}</div>
+    </div>
+
+    {% if ph_job_status == "IN_ACTIVE" %}
+    <div
+      style="background: #fff3cd; color: #856404; padding: 12px; border: 1px solid #ffeeba; border-radius: 6px; font-size: 14px; margin-top: 20px;">
+      The job is inactive. Please set `is_active = True` in the job config table.
+    </div>
+    {% elif ph_task_table_html %}
+    <h2>Task Details</h2>
+    <div class="table-scroll">
+      {{ ph_task_table_html | safe }}
+    </div>
+    {% endif %}
+
+
+    <h2>Job Tags</h2>
+    <div class="tag-container">
+
+      {% if ph_is_restart %}
+      <span class="tag" style="background-color: #f5f3ff; border-color: #7c3aed;">#JobRestart</span>
+      {% else %}
+      <span class="tag">#JobStart</span>
+      {% endif %}
+
+      {% if ph_fail_fast == True %}
+      <span class="tag" style="background-color: #fef2f2; border-color: #b91c1c;">#JobFailFast</span>
+      {% endif %}
+
+      {% if ph_job_status == "ERROR" %}
+      <span class="tag" style="background-color: #fef2f2; border-color: #b91c1c;">#JobInternalError</span>
+      {% elif ph_job_status == "TIMEOUT" %}
+      <span class="tag" style="background-color: #fef2f2; border-color: #ea580c;">#JobTimeOut</span>
+      {% elif ph_job_status == "STOPPED" %}
+      <span class="tag" style="background-color: #fef2f2; border-color: #b91c1c;">#JobTerminated</span>
+      {% endif %}
+
+    </div>
+
+
+    <div class="footer-note">
+      Regards,<br />
+      Mega Dashborad Team<br />
+      <em>This is an automatically generated email. Please do not reply.</em>
+    </div>
+  </div>
+</body>
+
+</html>

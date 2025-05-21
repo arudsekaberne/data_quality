@@ -1,0 +1,19 @@
+{
+    "@type": "MessageCard",
+    "@context": "https://schema.org/extensions",
+    "summary": "🚨 Action Required | Batch ID - {{ ph_batch_id }}",
+    "themeColor": "FF0000",
+    "title": "{{ ph_env }} [Data Quality] {{ ph_notification_emoji }} {{ ph_job_name }} - {{ ph_notification_status }} | Batch ID - {{ ph_batch_id }}",
+    "sections": [
+      {
+        "activityTitle": "📋 **Task Details**",
+        "text": "Hi {{ ph_job_owners }},\n\nThe job did not complete successfully. For further details, please refer to the notification sent to your Outlook inbox.",
+        "markdown": true
+      },
+      {
+        "activityTitle": "**🔖 Job Tags**",
+        "text": "{{ ph_job_tags }}"
+      }
+    ]
+  }
+  
